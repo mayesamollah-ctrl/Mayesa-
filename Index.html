@@ -1,0 +1,110 @@
+<!DOCTYPE html><html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Video Downloader</title><style>
+body{
+    font-family: Arial, sans-serif;
+    background:#111;
+    color:white;
+    text-align:center;
+    padding:20px;
+}
+.container{
+    max-width:600px;
+    margin:auto;
+}
+input{
+    width:100%;
+    padding:12px;
+    border:none;
+    border-radius:8px;
+    margin-bottom:10px;
+}
+button{
+    padding:12px 20px;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:16px;
+}
+.video-box{
+    margin-top:20px;
+}
+video{
+    width:100%;
+    border-radius:10px;
+}
+.download-btn{
+    display:inline-block;
+    margin-top:10px;
+    padding:10px 20px;
+    background:#00c853;
+    color:white;
+    text-decoration:none;
+    border-radius:8px;
+}
+</style></head>
+<body><div class="container">
+    <h2>📥 Video Downloader</h2><input type="text" id="videoUrl" placeholder="Paste Facebook/TikTok/Instagram URL">
+
+<button onclick="downloadVideo()">Get Video</button>
+
+<div id="result"></div>
+
+</div><script>
+async function downloadVideo() {
+
+    const url = document.getElementById("videoUrl").value.trim();
+    const result = document.getElementById("result");
+
+    if(!url){
+        alert("Enter video URL");
+        return;
+    }
+
+    result.innerHTML = "⏳ Loading...";
+
+    try {
+
+        const api =
+        `https://mahabub-apis.fun/mahabub/dl?url=${encodeURIComponent(url)}`;
+
+        const res = await fetch(api);
+        const data = await res.json();
+
+        const video =
+            data.hd ||
+            data.sd;
+
+        if(!video){
+            result.innerHTML = "❌ Video not found";
+            return;
+        }
+
+        result.innerHTML = `
+        <div class="video-box">
+            <h3>${data.title || "No Title"}</h3>
+            <p>📌 ${data.platform || "Unknown"}</p>
+
+            <video controls>
+                <source src="${video}" type="video/mp4">
+            </video>
+
+            <br>
+
+            <a class="download-btn"
+               href="${video}"
+               download>
+               ⬇ Download Video
+            </a>
+        </div>
+        `;
+
+    } catch(err){
+        console.error(err);
+        result.innerHTML = "❌ API Error";
+    }
+}
+</script></body>
+</html>
