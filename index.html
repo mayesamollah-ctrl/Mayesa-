@@ -1,110 +1,232 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Video Downloader</title><style>
-body{
-    font-family: Arial, sans-serif;
-    background:#111;
-    color:white;
-    text-align:center;
-    padding:20px;
-}
-.container{
-    max-width:600px;
-    margin:auto;
-}
-input{
-    width:100%;
-    padding:12px;
-    border:none;
-    border-radius:8px;
-    margin-bottom:10px;
-}
-button{
-    padding:12px 20px;
-    border:none;
-    border-radius:8px;
-    cursor:pointer;
-    font-size:16px;
-}
-.video-box{
-    margin-top:20px;
-}
-video{
-    width:100%;
-    border-radius:10px;
-}
-.download-btn{
-    display:inline-block;
-    margin-top:10px;
-    padding:10px 20px;
-    background:#00c853;
-    color:white;
-    text-decoration:none;
-    border-radius:8px;
-}
-</style></head>
-<body><div class="container">
-    <h2>📥 Video Downloader</h2><input type="text" id="videoUrl" placeholder="Paste Facebook/TikTok/Instagram URL">
-
-<button onclick="downloadVideo()">Get Video</button>
-
-<div id="result"></div>
-
-</div><script>
-async function downloadVideo() {
-
-    const url = document.getElementById("videoUrl").value.trim();
-    const result = document.getElementById("result");
-
-    if(!url){
-        alert("Enter video URL");
-        return;
-    }
-
-    result.innerHTML = "⏳ Loading...";
-
-    try {
-
-        const api =
-        `https://mahabub-apis.fun/mahabub/dl?url=${encodeURIComponent(url)}`;
-
-        const res = await fetch(api);
-        const data = await res.json();
-
-        const video =
-            data.hd ||
-            data.sd;
-
-        if(!video){
-            result.innerHTML = "❌ Video not found";
-            return;
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SECURE_DOWNLOAD_TERMINAL_V1.04</title>
+    <style>
+        :root {
+            --neon-green: #00ff41;
+            --dark-bg: #050a05;
+            --card-bg: rgba(10, 20, 10, 0.9);
+            --cyber-blue: #00f0ff;
         }
 
-        result.innerHTML = `
-        <div class="video-box">
-            <h3>${data.title || "No Title"}</h3>
-            <p>📌 ${data.platform || "Unknown"}</p>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Courier New', Courier, monospace;
+        }
 
-            <video controls>
-                <source src="${video}" type="video/mp4">
-            </video>
+        body {
+            background-color: var(--dark-bg);
+            color: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+        }
 
-            <br>
+        /* Matrix Overlay */
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(rgba(0, 255, 65, 0.1) 50%, rgba(0, 0, 0, 0) 50%),
+                        linear-gradient(90deg, rgba(0, 255, 65, 0.03), rgba(0, 0, 0, 0));
+            background-size: 100% 4px, 6px 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
 
-            <a class="download-btn"
-               href="${video}"
-               download>
-               ⬇ Download Video
-            </a>
+        /* Main Terminal Card */
+        .terminal-container {
+            position: relative;
+            background: var(--card-bg);
+            border: 2px solid var(--neon-green);
+            padding: 35px 25px;
+            width: 90%;
+            max-width: 500px;
+            border-radius: 4px;
+            box-shadow: 0 0 20px rgba(0, 255, 65, 0.2), inset 0 0 15px rgba(0, 255, 65, 0.1);
+            z-index: 2;
+            backdrop-filter: blur(5px);
+        }
+
+        /* Tech Corners */
+        .terminal-container::before, .terminal-container::after {
+            content: "";
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            border: 3px solid var(--cyber-blue);
+        }
+        .terminal-container::before { top: -5px; left: -5px; border-right: none; border-bottom: none; }
+        .terminal-container::after { bottom: -5px; right: -5px; border-left: none; border-top: none; }
+
+        .terminal-header {
+            text-align: center;
+            margin-bottom: 20px;
+            border-bottom: 1px dashed rgba(0, 255, 65, 0.4);
+            padding-bottom: 15px;
+        }
+
+        .status-dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background-color: var(--neon-green);
+            border-radius: 50%;
+            margin-right: 8px;
+            box-shadow: 0 0 10px var(--neon-green);
+            animation: blink 1s infinite;
+        }
+
+        .terminal-title {
+            font-size: 1rem;
+            color: var(--neon-green);
+            text-shadow: 0 0 8px rgba(0, 255, 65, 0.6);
+            letter-spacing: 2px;
+        }
+
+        /* Hacking Input Box */
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 0.8rem;
+            color: var(--cyber-blue);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
+
+        .url-input {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            border: 1px solid var(--neon-green);
+            padding: 12px;
+            color: #fff;
+            font-size: 0.9rem;
+            outline: none;
+            border-radius: 4px;
+            box-shadow: inset 0 0 5px rgba(0, 255, 65, 0.2);
+        }
+
+        .url-input:focus {
+            border-color: var(--cyber-blue);
+            box-shadow: 0 0 10px rgba(0, 240, 255, 0.3);
+        }
+
+        /* Download Button */
+        .download-btn {
+            display: block;
+            width: 100%;
+            background: transparent;
+            border: 2px solid var(--neon-green);
+            color: var(--neon-green);
+            padding: 14px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            transition: all 0.3s ease;
+        }
+
+        .download-btn:hover {
+            background: var(--neon-green);
+            color: var(--dark-bg);
+            box-shadow: 0 0 25px var(--neon-green);
+        }
+
+        /* Dynamic Logs Screen */
+        .terminal-console {
+            margin-top: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            border: 1px solid rgba(0, 255, 65, 0.3);
+            padding: 12px;
+            border-radius: 4px;
+            height: 90px;
+            overflow-y: auto;
+            font-size: 0.75rem;
+            color: #888;
+            line-height: 1.5;
+        }
+
+        .log-entry {
+            margin-bottom: 4px;
+        }
+        .log-success { color: var(--neon-green); }
+        .log-process { color: var(--cyber-blue); }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.2; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="terminal-container">
+        <div class="terminal-header">
+            <span class="status-dot"></span>
+            <span class="terminal-title">MEDIA_BYPASS_TERMINAL://</span>
         </div>
-        `;
 
-    } catch(err){
-        console.error(err);
-        result.innerHTML = "❌ API Error";
-    }
-}
-</script></body>
+        <!-- Input Target -->
+        <div class="input-group">
+            <label for="videoUrl">> ENTER_TARGET_URL:</label>
+            <input type="text" id="videoUrl" class="url-input" placeholder="Paste video link here..." autocomplete="off">
+        </div>
+
+        <!-- Action Button -->
+        <button id="executeBtn" class="download-btn">Execute Download</button>
+
+        <!-- Console logs -->
+        <div class="terminal-console" id="consoleLogs">
+            <div class="log-entry">> TERMINAL READY. AWAITING TARGET STREAMS...</div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('executeBtn').addEventListener('click', function() {
+            const urlInput = document.getElementById('videoUrl').value.trim();
+            const consoleLogs = document.getElementById('consoleLogs');
+
+            if (!urlInput) {
+                consoleLogs.innerHTML += `<div class="log-entry" style="color: #ff3333;">> [ERROR]: TARGET URL IS EMPTY. DEFENSE BYPASS FAILED.</div>`;
+                consoleLogs.scrollTop = consoleLogs.scrollHeight;
+                return;
+            }
+
+            // Dynamic Terminal Logs Animation
+            consoleLogs.innerHTML += `<div class="log-entry log-process">> INITIALIZING EXPLOIT ON TARGET API...</div>`;
+            
+            setTimeout(() => {
+                consoleLogs.innerHTML += `<div class="log-entry log-process">> ENCODING PARAMETERS... SUCCESS.</div>`;
+                consoleLogs.scrollTop = consoleLogs.scrollHeight;
+            }, 400);
+
+            setTimeout(() => {
+                // API Request Construction with encodeURIComponent
+                const apiUrl = `https://mahabub-apis.fun/mahabub/dl?url=${encodeURIComponent(urlInput)}`;
+                
+                consoleLogs.innerHTML += `<div class="log-entry log-success">> INJECTING STREAM TUNNEL... DOWNLOADING STARTED.</div>`;
+                consoleLogs.scrollTop = consoleLogs.scrollHeight;
+
+                // Redirecting or opening the API download link
+                window.location.href = apiUrl;
+            }, 900);
+        });
+    </script>
+
+</body>
 </html>
