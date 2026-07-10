@@ -143,33 +143,18 @@
             
             result.innerHTML = "📡 Extracting...";
             try {
-                const res = await fetch(`https://mahabub-apis.fun/mahabub/dl?url=${encodeURIComponent(url)}`);
+                const res = await fetch(`https://noobs-api.top/dipto?url=${encodeURIComponent(url)}`);
                 const data = await res.json();
+                const video = data.hd || data.sd || data.video || data.url;
                 
-                // কনসোলে ডেটা প্রিন্ট করে রাখা হলো যেন কোনো সমস্যা হলে চেক করা যায়
-                console.log("API Response Data:", data);
-
-                // সম্ভাব্য সব ধরণের অবজেক্ট কি-নাম চেক করার লজিক
-                let video = null;
-                
-                if (typeof data.result === 'string') {
-                    video = data.result;
-                } else if (data.result) {
-                    video = data.result.hd || data.result.sd || data.result.url || data.result.video || data.result.videoUrl;
-                } else {
-                    video = data.hd || data.sd || data.video || data.url || data.videoUrl || data.link;
-                }
-                
-                if(!video) {
-                    return result.innerHTML = "❌ NOT FOUND.";
-                }
-                
+                if(!video) return result.innerHTML = "❌ NOT FOUND.";
                 result.innerHTML = `<video controls src="${video}"></video><button class="download-btn" onclick="triggerDirectDownload('${video}')">Download</button>`;
-            } catch (error) { 
-                console.error("Error occurred:", error);
+            } catch { 
                 result.innerHTML = "❌ FAILED."; 
             }
         }
     </script>
 </body>
 </html>
+Eta te aei api ta use koro 
+https://mahabub-apis.fun/mahabub/dl?url=${(https://www.instagram.com/reel/DYjh5rKBrEw/?igsh=emo2bzB0bmhvMDI1)
