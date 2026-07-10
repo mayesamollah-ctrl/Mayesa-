@@ -3,34 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Habib Premium Downloader</title>
+    <title>Habib Video Downloader</title>
+    <!-- Tailwind CSS (For Modern & Premium UI) -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <style>
         body {
-            background: linear-gradient(135deg, #0b0f19 0%, #111827 100%);
+            background: linear-gradient(135deg, #090d16 0%, #111827 100%);
             min-height: 100vh;
         }
-        .glass-container {
-            background: rgba(17, 24, 39, 0.7);
-            backdrop-filter: blur(16px);
+        .glass-box {
+            background: rgba(17, 24, 39, 0.75);
+            backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 255, 255, 0.08);
         }
-        .custom-spinner {
+        .loader-spin {
             border: 3px solid rgba(255, 255, 255, 0.1);
-            width: 40px;
-            height: 40px;
+            width: 38px;
+            height: 38px;
             border-radius: 50%;
             border-left-color: #3b82f6;
-            animation: spin 0.8s linear infinite;
+            animation: spin 0.85s linear infinite;
         }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
-<body class="flex items-center justify-center p-4 antialiased text-gray-200">
+<body class="flex items-center justify-center p-4 text-gray-200 antialiased">
 
-    <div class="w-full max-w-lg p-6 sm:p-8 rounded-3xl glass-container shadow-2xl text-center">
+    <div class="w-full max-w-lg p-6 sm:p-8 rounded-3xl glass-box shadow-2xl text-center">
+        <!-- Brand Header -->
         <div class="flex justify-center items-center gap-3 mb-4">
-            <div class="p-3 bg-blue-600/20 text-blue-500 rounded-2xl">
+            <div class="p-3 bg-blue-600/15 text-blue-500 rounded-2xl">
                 <svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
                 </svg>
@@ -39,42 +41,49 @@
                 Habib Downloader
             </h1>
         </div>
-        <p class="text-sm text-gray-400 mb-8">Download Facebook & Instagram videos in high quality with zero hassle.</p>
+        <p class="text-sm text-gray-400 mb-8">Download Facebook & Instagram videos instantly via main API endpoint.</p>
 
+        <!-- Input Wrapper -->
         <div class="space-y-3 mb-6">
-            <input type="text" id="videoUrl" placeholder="Paste Facebook or Instagram link here..." 
+            <input type="text" id="videoUrl" placeholder="Paste full Facebook or Instagram link here..." 
                    class="w-full px-4 py-3.5 bg-gray-900/60 border border-gray-800 rounded-xl focus:outline-none focus:border-blue-500 text-white placeholder-gray-500 transition-all text-sm">
-            <button onclick="startDownloadProcess()" 
+            <button onclick="fetchVideoData()" 
                     class="w-full bg-blue-600 hover:bg-blue-500 active:scale-[0.99] text-white font-semibold py-3.5 rounded-xl transition-all shadow-lg shadow-blue-600/20 cursor-pointer">
-                Fetch Video Links
+                Get Download Links
             </button>
         </div>
 
-        <div id="loader" class="hidden flex-col items-center justify-center my-8 gap-3">
-            <div class="custom-spinner"></div>
-            <p class="text-blue-400 text-sm font-medium animate-pulse">Requesting server, please wait...</p>
+        <!-- Dynamic Loader -->
+        <div id="loader" class="hidden flex flex-col items-center justify-center my-8 gap-3">
+            <div class="loader-spin"></div>
+            <p class="text-blue-400 text-sm font-medium animate-pulse">Connecting to main API server...</p>
         </div>
 
+        <!-- Error Message Notification -->
         <div id="errorMessage" class="hidden p-4 mb-4 text-sm bg-red-950/40 border border-red-500/30 text-red-400 rounded-xl text-left"></div>
 
+        <!-- Output Result Panel -->
         <div id="resultBox" class="hidden mt-6 text-left bg-gray-900/50 p-5 rounded-xl border border-gray-800/80">
             <div class="flex items-center gap-2 mb-3 pb-2 border-b border-gray-800">
                 <span class="flex h-2 w-2 relative">
                     <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                     <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
                 </span>
-                <h3 class="text-sm font-bold text-emerald-400 uppercase tracking-wider">Video Extracted Successfully</h3>
+                <h3 class="text-sm font-bold text-emerald-400 uppercase tracking-wider">Video Extracted</h3>
             </div>
             
             <p id="videoAuthor" class="text-xs font-mono text-gray-400 mb-4 break-all"></p>
             
+            <!-- Download Links Container -->
             <div id="linksContainer" class="flex flex-col gap-2.5">
-                </div>
+                <!-- Javascript will inject links here -->
+            </div>
         </div>
     </div>
 
+    <!-- API Connection Logic -->
     <script>
-        async function startDownloadProcess() {
+        async function fetchVideoData() {
             const urlInput = document.getElementById('videoUrl').value.trim();
             const loader = document.getElementById('loader');
             const errorBox = document.getElementById('errorMessage');
@@ -82,20 +91,20 @@
             const linksContainer = document.getElementById('linksContainer');
             const authorText = document.getElementById('videoAuthor');
 
-            // Resetting view states
+            // Reset UI components
             errorBox.classList.add('hidden');
             resultBox.classList.add('hidden');
             linksContainer.innerHTML = '';
             
             if (!urlInput) {
-                showError("Please paste a valid link first!");
+                showError("Please paste a social media video link first!");
                 return;
             }
 
             loader.classList.remove('hidden');
 
             try {
-                // আপনার লাইভ Vercel API এন্ডপয়েন্ট ব্যবহার করা হয়েছে
+                // আপনার নির্দিষ্ট করা মেইন লাইভ API এন্ডপয়েন্ট ব্যবহার করা হয়েছে
                 const response = await fetch('https://habib-downloader.vercel.app/api/download', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -107,25 +116,25 @@
 
                 if (resData.success) {
                     const payload = resData.data;
-                    authorText.innerText = 'Source/Owner: ' + (payload.author || payload.developer || 'Social Media Shared Video');
+                    authorText.innerText = 'Source/Owner: ' + (payload.author || payload.developer || 'Public Media Post');
                     
-                    // এফবি এবং ইন্সটার জন্য ডাটা স্ট্রাকচার হ্যান্ডেল করা
+                    // ভিডিও রেজোলিউশন ও লিংক অবজেক্ট অ্যারে চেক করা
                     const videoList = payload.videos || payload.data || [];
 
                     if (videoList.length === 0) {
-                        showError("Could not retrieve clean download stream. Ensure the post is public.");
+                        showError("Could not retrieve clean download stream. Ensure the post is public and use full video links.");
                         return;
                     }
 
-                    // প্রতিটি ভিডিও রেজোলিউশনের জন্য ডাউনলোড বাটন তৈরি
+                    // প্রতিটি উপলব্ধ রেজোলিউশনের জন্য ডাউনলোড বাটন তৈরি
                     videoList.forEach((video, index) => {
                         if (video.url) {
                             const downloadBtn = document.createElement('a');
                             downloadBtn.href = video.url;
                             downloadBtn.target = '_blank';
-                            downloadBtn.className = "flex justify-between items-center bg-gray-800 hover:bg-gray-700/80 text-white font-medium py-3 px-4 rounded-xl border border-gray-700/50 transition-all group";
+                            downloadBtn.className = "flex justify-between items-center bg-gray-800 hover:bg-gray-700/80 text-white font-medium py-3 px-4 rounded-xl border border-gray-700/50 transition-all group shadow-sm";
                             
-                            const resolutionQuality = video.resolution ? video.resolution : 'Server Link ' + (index + 1);
+                            const resolutionQuality = video.resolution ? video.resolution : 'Download Link ' + (index + 1);
                             downloadBtn.innerHTML = `
                                 <span class="text-sm">Download Video (${resolutionQuality.toUpperCase()})</span>
                                 <svg class="w-4 h-4 text-gray-400 group-hover:text-blue-400 transition-colors" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -138,12 +147,12 @@
 
                     resultBox.classList.remove('hidden');
                 } else {
-                    showError(resData.message || "Failed to process URL. Please double-check the link.");
+                    showError(resData.message || "Failed to process URL. Make sure the link is correct and public.");
                 }
 
             } catch (err) {
                 loader.classList.add('hidden');
-                showError("Unable to connect to your Vercel server. Check your API setup.");
+                showError("Unable to connect to the main Vercel API. Check if your Vercel server status is active.");
             }
         }
 
