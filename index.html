@@ -3,320 +3,171 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mayesa Downloader</title>
+    <title>Habib Downloader | Cyberpunk Edition</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;900&display=swap" rel="stylesheet">
+    
     <style>
-        :root {
-            /* image.png এর থিম অনুযায়ী নিয়ন কালার প্যালেট */
-            --primary-glow: #00f0ff; /* সায়ান গ্লো */
-            --secondary-glow: #bd00ff; /* মেজেন্টা/পার্পল গ্লো */
-            --accent-blue: #0066ff; /* নিয়ন ব্লু */
-            --bg-dark: #06080f; /* ডিপ ডার্ক ব্যাকগ্রাউন্ড */
-            --card-bg: rgba(11, 15, 28, 0.75); /* গ্লাস মরফিজম ইফেক্ট */
-            --text-main: #ffffff;
-            --text-muted: #94a3b8;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body, html { width: 100%; height: 100%; overflow: hidden; background: #050111; font-family: sans-serif; color: #e0d9f5; }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--bg-dark);
-            /* image.png এর মাল্টি-কালার নিয়ন লাইটের মতো ব্যাকগ্রাউন্ড গ্রেডিয়েন্ট */
-            background-image: 
-                radial-gradient(circle at 10% 20%, rgba(0, 240, 255, 0.08) 0%, transparent 40%),
-                radial-gradient(circle at 90% 80%, rgba(189, 0, 255, 0.08) 0%, transparent 40%),
-                linear-gradient(rgba(255, 255, 255, 0.01) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255, 255, 255, 0.01) 1px, transparent 1px);
-            background-size: 100% 100%, 100% 100%, 30px 30px, 30px 30px;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow-x: hidden;
-            color: var(--text-main);
-            position: relative;
-        }
-
-        /* Ambient Outer Light (image.png স্টাইল) */
         body::before {
-            content: "";
-            position: fixed;
-            width: 600px;
-            height: 600px;
-            background: radial-gradient(circle, rgba(0, 102, 255, 0.1) 0%, rgba(0,0,0,0) 70%);
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 0;
-            pointer-events: none;
+            content: ''; position: fixed; top: -20px; left: -20px; width: calc(100% + 40px); height: calc(100% + 40px);
+            background: linear-gradient(to bottom, #050111, #1a0136, #050111), radial-gradient(circle, rgba(111,0,255,0.2), transparent 70%);
+            z-index: 0; animation: ambientShift 25s ease-in-out infinite alternate;
+        }
+        @keyframes ambientShift {
+            0% { transform: translate3d(0, 0, 0) scale(1); }
+            100% { transform: translate3d(-5px, 10px, 0) scale(0.99); }
         }
 
-        /* Premium Tech Grid Container */
+        body::after {
+            content: ''; position: fixed; bottom: -70%; left: -50%; width: 200%; height: 200%;
+            background-image: linear-gradient(rgba(0,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0,255,255,0.03) 1px, transparent 1px);
+            background-size: 60px 60px; transform: perspective(400px) rotateX(65deg); z-index: 1; animation: gridMove 50s linear infinite;
+        }
+        @keyframes gridMove { 0% { background-position: 0 0; } 100% { background-position: 0 1000px; } }
+
         .container {
-            position: relative;
-            width: 92%;
-            max-width: 440px;
-            padding: 35px 25px;
-            border-radius: 16px;
-            background: var(--card-bg);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(0, 240, 255, 0.2);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7), 0 0 30px rgba(0, 240, 255, 0.05);
-            z-index: 10;
+            position: absolute; top: 50%; left: 50%; z-index: 2; text-align: center;
+            background: rgba(15, 2, 35, 0.8); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+            padding: 30px 22px; border: 1px solid rgba(0, 255, 255, 0.2); border-radius: 15px;
+            width: 90%; max-width: 440px; will-change: transform; transform: translate3d(-50%, -50%, 0);
+            animation: float 4s ease-in-out infinite alternate;
+        }
+        @keyframes float {
+            0% { transform: translate3d(-50%, -48%, 0); box-shadow: 0 5px 20px rgba(111,0,255,0.2); }
+            100% { transform: translate3d(-50%, -52%, 0); box-shadow: 0 15px 35px rgba(0,255,255,0.25); }
         }
 
-        /* Cyber Corner Indicators */
-        .container::before, .container::after {
-            content: "";
-            position: absolute;
-            width: 14px;
-            height: 14px;
-            border: 2px solid var(--primary-glow);
+        .terminal-text { 
+            font-family: 'Orbitron', sans-serif; font-size: 1.6rem; font-weight: 900; margin-bottom: 25px; 
+            background: linear-gradient(135deg, #00ffff, #8b5cf6, #6f00ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            text-transform: uppercase; letter-spacing: 2px; animation: glow 3s infinite alternate;
         }
-        .container::before { top: -2px; left: -2px; border-right: none; border-bottom: none; }
-        .container::after { bottom: -2px; right: -2px; border-left: none; border-top: none; }
-
-        .terminal-text {
-            font-size: 24px;
-            font-weight: 800;
-            margin-bottom: 25px;
-            color: var(--text-main);
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            text-align: center;
-            background: linear-gradient(90deg, #00f0ff, #bd00ff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 10px rgba(0, 240, 255, 0.2);
-        }
-
-        /* Input Styling */
+        @keyframes glow { 0% { filter: drop-shadow(0 0 4px rgba(0,255,255,0.5)); } 100% { filter: drop-shadow(0 0 10px rgba(111,0,255,0.6)); } }
+        
         input {
-            width: 100%;
-            padding: 15px;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            outline: none;
-            border-radius: 10px;
-            background: rgba(4, 6, 12, 0.8);
-            color: #fff;
-            font-size: 14px;
-            margin-bottom: 18px;
-            transition: all 0.3s ease;
+            width: 100%; padding: 14px; background: rgba(0, 0, 0, 0.6); border: 1px solid #6f00ff; border-radius: 8px;
+            color: #fff; margin-bottom: 18px; text-align: center; outline: none; font-size: 0.95rem; transition: 0.3s;
         }
+        input:focus { border-color: #8b5cf6; box-shadow: 0 0 12px rgba(0,255,255,0.4); }
 
-        input:focus {
-            border-color: var(--primary-glow);
-            box-shadow: 0 0 15px rgba(0, 240, 255, 0.25);
-            background: rgba(0, 240, 255, 0.02);
-        }
-
-        input::placeholder {
-            color: var(--text-muted);
-            opacity: 0.6;
-        }
-
-        /* Action Solid Button */
         .btn-cyber {
-            width: 100%;
-            padding: 15px;
-            border: none;
-            border-radius: 10px;
-            font-size: 15px;
-            font-weight: 700;
-            cursor: pointer;
-            color: #fff;
-            background: linear-gradient(135deg, var(--accent-blue), var(--secondary-glow));
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 20px rgba(0, 102, 255, 0.3);
+            background: linear-gradient(135deg, #6f00ff, #007bff); color: #fff; border: none; border-radius: 8px;
+            padding: 14px; cursor: pointer; width: 100%; font-weight: bold; font-size: 1.05rem; text-transform: uppercase; transition: 0.3s;
+        }
+        .btn-cyber:hover { box-shadow: 0 0 15px rgba(111,0,255,0.6); }
+        
+        #result { margin-top: 20px; font-size: 0.95rem; color: #0ff; }
+        video { width: 100%; margin-top: 15px; border: 2px solid #6f00ff; border-radius: 8px; }
+        
+        .download-btn { 
+            display: block; margin-top: 15px; padding: 12px; background: linear-gradient(135deg, #00ffff, #8b5cf6);
+            color: #050111; font-weight: bold; border-radius: 8px; text-decoration: none; text-transform: uppercase; width: 100%; border: none;
         }
 
-        .btn-cyber:hover {
-            opacity: 0.95;
-            box-shadow: 0 0 25px rgba(189, 0, 255, 0.5);
-            transform: translateY(-1px);
-        }
+        .operator-profile { margin-top: 25px; padding: 15px; border-top: 1px solid rgba(0,255,255,0.2); background: rgba(0,0,0,0.4); border-radius: 8px; text-align: left; }
+        .profile-header { display: flex; align-items: center; gap: 12px; margin-bottom: 15px; }
+        .profile-img { width: 55px; height: 55px; border-radius: 50%; border: 2px solid #6f00ff; object-fit: cover; }
+        .profile-info h4 { color: #fff; font-size: 1.05rem; }
+        .profile-info p { color: #6f00ff; font-size: 0.8rem; font-weight: bold; }
+        
+        .social-grid { display: flex; gap: 10px; margin-bottom: 12px; }
+        .btn-social { flex: 1; text-align: center; padding: 9px; background: rgba(111,0,255,0.1); color: #e0d9f5; border: 1px solid #6f00ff; border-radius: 6px; text-decoration: none; font-size: 0.85rem; font-weight: bold; }
+        .btn-social:hover { background: rgba(111,0,255,0.3); color: #fff; }
 
-        /* Output Response Display */
-        #result {
-            margin-top: 15px;
-            font-size: 14px;
-            color: var(--text-muted);
-        }
-
-        video {
-            width: 100%;
-            margin-top: 20px;
-            border-radius: 10px;
-            border: 1px solid rgba(0, 240, 255, 0.2);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.6);
-        }
-
-        .download-btn {
-            display: block;
-            margin-top: 15px;
-            text-decoration: none;
-            padding: 14px;
-            border-radius: 10px;
-            color: #fff;
-            background: linear-gradient(90deg, #00f0ff, #0066ff);
-            text-align: center;
-            font-weight: bold;
-            text-transform: uppercase;
-            font-size: 14px;
-            letter-spacing: 0.5px;
-            transition: all 0.3s;
-            box-shadow: 0 4px 15px rgba(0, 240, 255, 0.25);
-        }
-
-        .download-btn:hover {
-            box-shadow: 0 0 20px rgba(0, 240, 255, 0.5);
-        }
-
-        /* Operator Identity Footer Card */
-        .operator-profile {
-            margin-top: 30px;
-            border-top: 1px solid rgba(0, 240, 255, 0.15);
-            padding-top: 20px;
-            text-align: left;
-        }
-
-        .profile-header {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .profile-img {
-            width: 55px;
-            height: 55px;
-            border-radius: 10px;
-            border: 1px solid var(--primary-glow);
-            object-fit: cover;
-            box-shadow: 0 0 10px rgba(0, 240, 255, 0.2);
-        }
-
-        .profile-info h4 {
-            color: var(--text-main);
-            margin-bottom: 2px;
-            font-size: 16px;
-            font-weight: 600;
-        }
-
-        .profile-info p {
-            color: var(--primary-glow);
-            font-size: 11px;
-            text-transform: uppercase;
-            font-weight: bold;
-            letter-spacing: 0.5px;
-        }
-
-        /* Action Layout Buttons */
-        .profile-buttons {
-            display: flex;
-            gap: 10px;
-            margin-top: 15px;
-        }
-
-        .btn-contact {
-            flex: 1;
-            text-decoration: none;
-            padding: 10px;
-            border-radius: 8px;
-            color: var(--text-main);
-            font-size: 13px;
-            font-weight: 600;
-            text-align: center;
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            transition: all 0.2s;
-        }
-
-        .btn-contact:hover {
-            background: rgba(0, 240, 255, 0.08);
-            border-color: var(--primary-glow);
-            color: #fff;
-            box-shadow: 0 0 10px rgba(0, 240, 255, 0.1);
-        }
-
-        /* Bottom Love Credit Lines */
-        .credit-footer {
-            margin-top: 20px;
-            color: var(--text-muted);
-            font-size: 13px;
-            text-align: center;
-            font-weight: 500;
-            animation: pulse 2.5s infinite alternate;
-        }
-
-        @keyframes pulse {
-            from { opacity: 0.4; }
-            to { opacity: 1; }
-        }
+        .credit-footer { text-align: center; font-size: 0.85rem; color: #fff; font-weight: bold; margin-top: 5px; animation: pulse 2s infinite alternate; }
+        @keyframes pulse { from { opacity: 0.7; } to { opacity: 1; } }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <!-- Dashboard Core Branding Header -->
-        <div class="terminal-text">Mayesa Downloader 📥</div>
+        <div class="terminal-text">Habib Downloader</div>
         
-        <!-- Media Extraction Module -->
-        <input type="text" id="videoUrl" placeholder="Enter Video URL Link Here...">
-        <button class="btn-cyber" onclick="downloadVideo()">Extract Video</button>
+        <input type="text" id="videoUrl" placeholder="Paste Video URL Here...">
+        <button class="btn-cyber" onclick="downloadVideo()">Download Now</button>
 
-        <!-- Ajax Response Loading Output -->
         <div id="result"></div>
 
-        <!-- Infrastructure Profile Area -->
         <div class="operator-profile">
             <div class="profile-header">
-                <img class="profile-img" src="https://files.catbox.moe/wo35v2.jpg" alt="Mayesa Mollah">
+                <img class="profile-img" src="https://files.catbox.moe/473ayg.jpg" alt="Habib">
                 <div class="profile-info">
-                    <h4>Owner: Mayesa</h4>
-                    <p>// System Root Verified</p>
+                    <h4>Owner: HABIB</h4>
+                    <p>STATUS: ONLINE</p>
                 </div>
             </div>
             
-            <!-- Contact Interface Handlers -->
-            <div class="profile-buttons">
-                <a class="btn-contact" href="https://www.facebook.com/share/1BBoYP1Ctq/" target="_blank">Facebook</a>
-                <a class="btn-contact" href="https://www.instagram.com/missmayesa?igsh=MTJhcmgzOTB3am03Yg==" target="_blank">Instagram</a>
+            <div class="social-grid">
+                <a href="https://www.facebook.com/share/1DAaMYGeJt/" class="btn-social" target="_blank"><i class="fa-brands fa-facebook-f"></i> Facebook</a>
+                <a href="https://www.instagram.com/sk_habib_687?igsh=em5yZzF2NnJ4NGo3" class="btn-social" target="_blank"><i class="fa-brands fa-instagram"></i> Instagram</a>
             </div>
 
-            <!-- Signature Watermark -->
-            <div class="credit-footer">
-                Created by 💝 Mayesa Mollah
-            </div>
+            <div class="credit-footer">Created by 💝 Sk Habib</div>
         </div>
     </div>
 
     <script>
-        // Data Capture & Integration Loop 
+        async function triggerDirectDownload(videoUrl) {
+            const btn = document.querySelector('.download-btn');
+            const oldText = btn.innerHTML;
+            btn.innerHTML = "⏳ Downloading...";
+            btn.style.pointerEvents = "none";
+
+            try {
+                const response = await fetch(videoUrl);
+                const blob = await response.blob();
+                const blobUrl = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = blobUrl;
+                a.download = `Habib_${Date.now()}.mp4`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                window.URL.revokeObjectURL(blobUrl);
+                btn.innerHTML = "✅ Complete";
+            } catch {
+                window.open(videoUrl, '_blank');
+                btn.innerHTML = "⚡ Opening...";
+            } finally {
+                setTimeout(() => { btn.innerHTML = oldText; btn.style.pointerEvents = "auto"; }, 2500);
+            }
+        }
+
         async function downloadVideo() {
             const url = document.getElementById("videoUrl").value.trim();
             const result = document.getElementById("result");
-            if(!url) return alert("Please enter a valid URL");
+            if(!url) return alert("Please enter a URL");
             
-            result.innerHTML = "<span style='color:var(--primary-glow);'>⏳ Extracting media pipeline payload...</span>";
+            result.innerHTML = "📡 Extracting...";
             try {
                 const res = await fetch(`https://mahabub-apis.fun/mahabub/dl?url=${encodeURIComponent(url)}`);
                 const data = await res.json();
-                const video = data.hd || data.sd;
-                if(!video) return result.innerHTML = "<span style='color:#ef4444;'>❌ Media source link structure not found.</span>";
                 
-                result.innerHTML = `
-                    <video controls src="${video}"></video>
-                    <a class="download-btn" href="${video}" download target="_blank">Download Asset Now</a>
-                `;
-            } catch(e) { 
-                result.innerHTML = "<span style='color:#ef4444;'>❌ Error resolving API target cluster.</span>"; 
+                // কনসোলে ডেটা প্রিন্ট করে রাখা হলো যেন কোনো সমস্যা হলে চেক করা যায়
+                console.log("API Response Data:", data);
+
+                // সম্ভাব্য সব ধরণের অবজেক্ট কি-নাম চেক করার লজিক
+                let video = null;
+                
+                if (typeof data.result === 'string') {
+                    video = data.result;
+                } else if (data.result) {
+                    video = data.result.hd || data.result.sd || data.result.url || data.result.video || data.result.videoUrl;
+                } else {
+                    video = data.hd || data.sd || data.video || data.url || data.videoUrl || data.link;
+                }
+                
+                if(!video) {
+                    return result.innerHTML = "❌ NOT FOUND.";
+                }
+                
+                result.innerHTML = `<video controls src="${video}"></video><button class="download-btn" onclick="triggerDirectDownload('${video}')">Download</button>`;
+            } catch (error) { 
+                console.error("Error occurred:", error);
+                result.innerHTML = "❌ FAILED."; 
             }
         }
     </script>
