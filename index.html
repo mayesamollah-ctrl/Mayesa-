@@ -65,6 +65,7 @@
         .download-btn { 
             display: block; margin-top: 15px; padding: 12px; background: linear-gradient(135deg, #00ffff, #8b5cf6);
             color: #050111; font-weight: bold; border-radius: 8px; text-decoration: none; text-transform: uppercase; width: 100%; border: none;
+            cursor: pointer;
         }
 
         .operator-profile { margin-top: 25px; padding: 15px; border-top: 1px solid rgba(0,255,255,0.2); background: rgba(0,0,0,0.4); border-radius: 8px; text-align: left; }
@@ -143,18 +144,30 @@
             
             result.innerHTML = "📡 Extracting...";
             try {
-                const res = await fetch(`https://noobs-api.top/dipto?url=${encodeURIComponent(url)}`);
+                // একটি ফ্রি এবং স্টেবল পাবলিক অল-ইন-ওয়ান ডাউনলোডার API ব্যবহার করা হয়েছে
+                const res = await fetch(`https://api.vyturex.com/download?url=${encodeURIComponent(url)}`);
                 const data = await res.json();
-                const video = data.hd || data.sd || data.video || data.url;
                 
-                if(!video) return result.innerHTML = "❌ NOT FOUND.";
+                // বিভিন্ন API রেসপন্স ফরম্যাটের জন্য কন্ডিশন চেক
+                const video = data.video || data.url || (data.urls && data.urls[0]);
+                
+                if(!video) {
+                    // ব্যাকআপ এপিআই (যদি প্রথমটি ফেইল করে)
+                    const backupRes = await fetch(`https://api.sandipbaruwal.codes/download?url=${encodeURIComponent(url)}`);
+                    const backupData = await backupRes.json();
+                    const backupVideo = backupData.videoUrl || backupData.url;
+                    
+                    if(!backupVideo) return result.innerHTML = "<span style='color: #ff4a4a;'>❌ NOT FOUND.</span>";
+                    
+                    result.innerHTML = `<video controls src="${backupVideo}"></video><button class="download-btn" onclick="triggerDirectDownload('${backupVideo}')">Download</button>`;
+                    return;
+                }
+                
                 result.innerHTML = `<video controls src="${video}"></video><button class="download-btn" onclick="triggerDirectDownload('${video}')">Download</button>`;
             } catch { 
-                result.innerHTML = "❌ FAILED."; 
+                result.innerHTML = "<span style='color: #ff4a4a;'>❌ FAILED.</span>"; 
             }
         }
     </script>
 </body>
 </html>
-Eta te aei api ta use koro 
-https://mahabub-apis.fun/mahabub/dl?url=${(https://www.instagram.com/reel/DYjh5rKBrEw/?igsh=emo2bzB0bmhvMDI1)
