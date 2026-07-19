@@ -3,113 +3,147 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PRO Downloader</title>
+<title>SK Downloader | CEO HABIB</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
-    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap');
     
     :root {
-        --bg1: #667eea; --bg2: #764ba2; --bg3: #f093fb;
-        --card: rgba(255, 255, 255, 0.12); --text: white; --border: rgba(255,255,255,0.25);
-        --input: rgba(255,255,255,0.18);
-    }
-    body.dark {
-        --bg1: #0f0f0f; --bg2: #1a1a1a; --bg3: #2a2a2a;
-        --card: rgba(0, 0, 0, 0.4); --text: #e0e0e0; --border: rgba(255,255,255,0.1);
-        --input: rgba(0,0,0,0.3);
+        --bg-color: #0f172a;
+        --card-bg: rgba(30, 41, 59, 0.7);
+        --text-main: #ffffff;
+        --text-sub: #94a3b8;
+        --input-bg: #0f172a;
+        --input-border: #334155;
+        --primary-color: #38bdf8;
     }
 
+    .light-mode {
+        --bg-color: #f8fafc;
+        --card-bg: rgba(255, 255, 255, 0.9);
+        --text-main: #1e293b;
+        --text-sub: #64748b;
+        --input-bg: #ffffff;
+        --input-border: #cbd5e1;
+        --primary-color: #2563eb;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; transition: 0.3s; }
+    
     body {
         min-height: 100vh;
-        background: linear-gradient(135deg, var(--bg1)
-        0%, var(--bg2) 50%, var(--bg3) 100%);
-        display: flex; justify-content: center; align-items: center; padding: 20px;
-        color: var(--text); transition: 0.4s;
+        background: var(--bg-color);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
     }
-    
-    .theme-btn {
-        position: absolute; top: 20px; right: 20px;
-        background: rgba(255,255,255,0.2); border: none; border-radius: 50%;
-        width: 45px; height: 45px; font-size: 20px; cursor: pointer;
-        backdrop-filter: blur(10px); transition: 0.3s; color: white;
-    }
-    .theme-btn:hover { transform: rotate(180deg) scale(1.1); }
 
     .card {
-        background: var(--card); backdrop-filter: blur(25px);
-        border: 1px solid var(--border); padding: 35px; width: 100%;
-        max-width: 440px; border-radius: 25px; box-shadow: 0 15px 50px rgba(0,0,0,0.4);
+        background: var(--card-bg);
+        backdrop-filter: blur(15px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 40px;
+        width: 100%;
+        max-width: 400px;
+        border-radius: 30px;
+        box-shadow: 0 25px 50px -12px rgba(0,0,0,0.3);
+        text-align: center;
+        position: relative;
+    }
+
+    .theme-toggle { position: absolute; top: 20px; right: 20px; cursor: pointer; color: var(--text-main); font-size: 20px; }
+    
+    /* নতুন প্রোফাইল ছবি স্টাইল */
+    .profile-img-container {
+        width: 110px;
+        height: 110px;
+        margin: -60px auto 20px auto; /* কার্ডের উপরে ভাসমান রাখার জন্য */
+        position: relative;
     }
     
-    .logo { text-align: center; font-size: 28px; font-weight: 700; margin-bottom: 5px; }
-    .logo span { color: #ffd700; }
-    .subtitle { text-align: center; font-size: 13px; opacity: 0.85; margin-bottom: 10px; }
-    .status { text-align: center; font-size: 11px; color: #7bed9f; margin-bottom: 20px; }
+    .profile-img-container img {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        border: 4px solid #fff;
+        box-shadow: 0 0 20px rgba(56, 189, 248, 0.6); /* গ্লো ইফেক্ট */
+        object-fit: cover;
+    }
     
+    .logo { color: var(--text-main); font-size: 26px; font-weight: 800; margin-bottom: 10px; }
+    .logo span { color: var(--primary-color); }
+    
+    .subtitle { color: var(--text-sub); font-size: 14px; margin-bottom: 25px; }
+
     input {
-        width: 100%; padding: 15px 18px; background: var(--input);
-        border: 1.5px solid var(--border); border-radius: 15px; color: var(--text);
-        font-size: 14px; outline: none; margin-bottom: 18px;
+        width: 100%;
+        padding: 16px 20px;
+        background: var(--input-bg);
+        border: 2px solid var(--input-border);
+        border-radius: 16px;
+        color: var(--text-main);
+        font-size: 15px;
+        margin-bottom: 20px;
+        outline: none;
     }
-    input::placeholder { color: var(--text); opacity: 0.6; }
-    
+    input:focus { border-color: var(--primary-color); }
+
     .btn {
-        width: 100%; padding: 15px; background: linear-gradient(90deg, #ff6b6b, #feca57, #48dbfb);
-        background-size: 200% auto; border: none; border-radius: 15px; color: white;
-        font-size: 16px; font-weight: 700; cursor: pointer; transition: 0.4s;
+        width: 100%;
+        padding: 16px;
+        background: linear-gradient(135deg, #38bdf8, #818cf8);
+        border: none;
+        border-radius: 16px;
+        color: white;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        margin-bottom: 25px;
     }
-    .btn:hover { background-position: right center; transform: translateY(-3px); }
-    
-    .profile {
-        display: flex; align-items: center; gap: 15px; margin: 25px 0; padding: 18px;
-        background: var(--input); border-radius: 15px; border: 1px solid var(--border);
+    .btn:hover { opacity: 0.9; transform: translateY(-2px); }
+
+    .social-links { display: flex; gap: 10px; }
+    .social-links a {
+        flex: 1;
+        padding: 12px;
+        background: rgba(128,128,128,0.1);
+        color: var(--text-main);
+        text-decoration: none;
+        border-radius: 12px;
+        font-size: 14px;
+        border: 1px solid var(--input-border);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
     }
-    .profile img { 
-        width: 55px; height: 55px; border-radius: 50%; 
-        border: 3px solid #ffd700; object-fit: cover;
-        box-shadow: 0 0 15px rgba(255,215,0,0.5);
-    }
-    .profile b { font-size: 15px; }
-    .profile p { font-size: 12px; opacity: 0.8; }
-    
-    .social { display: flex; gap: 12px; margin-bottom: 18px; }
-    .social a {
-        flex: 1; padding: 12px; text-align: center; border-radius: 12px;
-        background: var(--input); color: var(--text); text-decoration: none;
-        font-size: 14px; font-weight: 600; transition: 0.3s; border: 1px solid var(--border);
-    }
-    .social a:hover { background: rgba(255,255,255,0.2); transform: translateY(-2px); }
-    .footer { text-align: center; font-size: 12px; opacity: 0.7; margin-top: 10px; }
+    .social-links a:hover { background: rgba(128,128,128,0.2); }
 </style>
 </head>
 <body>
 
-<button class="theme-btn" onclick="toggleTheme()" id="themeBtn">☀️</button>
-
 <div class="card">
-    <div class="logo"> <span>PRO</span> DOWNLOADER ⬇️</div>
-    <p class="subtitle">Facebook • Instagram • YouTube • TikTok</p>
-    <p class="status">● System online</p>
-    
-    <input type="text" id="videoUrl" placeholder="Paste Video Link Here...">
-    <button class="btn" onclick="downloadVideo()">🚀 GET VIDEO NOW</button>
-    
-    <div class="profile">
-        <img src="https://i.imgur.com/zWTJetB.jpeg" alt="Sk Habibulla">
-        <div>
-            <p> Developer | </p>
-            <b>Sk Habibulla</b>
-             <p> Contact to owner 𝄞  </p>
-        </div>
+    <div class="theme-toggle" onclick="document.body.classList.toggle('light-mode')">
+        <i class="fas fa-adjust"></i>
     </div>
     
-    <div class="social">
-        <a href="https://www.facebook.com/share/1EegedjFZh/" target="_blank">📘 Facebook</a>
-        <a href="https://www.instagram.com/sk_habib_687?igsh=em5yZzF2NnJ4NGo3" target="_blank">📸 Instagram</a>
+    <!-- নতুন প্রোফাইল ছবি -->
+    <div class="profile-img-container">
+        <img src="https://i.imgur.com/zWTJetB.jpeg" alt="CEO HABIB">
     </div>
     
-    <div class="footer">
-        Made with ❤️ by Sk Habibulla 
+    <div class="logo">CEO <span>HABIB</span></div>
+    <p class="subtitle">Fast & Reliable Video Downloader</p>
+    
+    <input type="text" id="videoUrl" placeholder="Paste video link here...">
+    <button class="btn" onclick="downloadVideo()">
+        <i class="fas fa-download"></i> Download Now
+    </button>
+    
+    <div class="social-links">
+        <a href="https://www.facebook.com/share/1EegedjFZh/" target="_blank"><i class="fab fa-facebook"></i> Facebook</a>
+        <a href="https://www.instagram.com/sk_habib_687?igsh=em5yZzF2NnJ4NGo3" target="_blank"><i class="fab fa-instagram"></i> Instagram</a>
     </div>
 </div>
 
@@ -117,22 +151,21 @@
 const API_URL = "https://raw.githubusercontent.com/mahmudx7/exe/main/baseApiUrl.json";
 let config = {};
 
-window.onload = () => {
-    fetch(API_URL).then(res => res.json()).then(data => config = data);
-    document.body.classList.add('dark'); // Default Dark
-    document.getElementById('themeBtn').innerText = '☀️';
-}
-
-function toggleTheme() {
-    document.body.classList.toggle('dark');
-    const btn = document.getElementById('themeBtn');
-    btn.innerText = document.body.classList.contains('dark') ? '☀️' : '🌙';
+window.onload = function() {
+    fetch(API_URL)
+    .then(res => res.json())
+    .then(data => { config = data; })
+    .catch(err => console.log("API Error"));
 }
 
 function downloadVideo() {
     const url = document.getElementById('videoUrl').value;
-    if(url === "") return alert("⚠️ আগে Link টা paste করো!");
-    alert("✅ API: " + config.baseApi + "\n📹 Video: " + url);
+    if(url === "") {
+        alert("Please paste a link first!");
+        return;
+    }
+    // এখানে API কল হবে (আপনার আগের কোড অনুযায়ী)
+    alert("API: " + config.baseApi + "\nProcessing: " + url);
 }
 </script>
 
