@@ -1,55 +1,140 @@
 <!DOCTYPE html>
-<html lang="bn">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Video Downloader</title>
-    <style>
-        body { font-family: sans-serif; text-align: center; padding: 50px; background: #f4f4f4; }
-        input { padding: 10px; width: 300px; border: 1px solid #ccc; border-radius: 5px; }
-        button { padding: 10px 20px; background: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer; }
-        #result { margin-top: 20px; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PRO Downloader</title>
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+    
+    :root {
+        --bg1: #667eea; --bg2: #764ba2; --bg3: #f093fb;
+        --card: rgba(255, 255, 255, 0.12); --text: white; --border: rgba(255,255,255,0.25);
+        --input: rgba(255,255,255,0.18);
+    }
+    body.dark {
+        --bg1: #0f0f0f; --bg2: #1a1a1a; --bg3: #2a2a2a;
+        --card: rgba(0, 0, 0, 0.4); --text: #e0e0e0; --border: rgba(255,255,255,0.1);
+        --input: rgba(0,0,0,0.3);
+    }
+
+    body {
+        min-height: 100vh;
+        background: linear-gradient(135deg, var(--bg1)
+        0%, var(--bg2) 50%, var(--bg3) 100%);
+        display: flex; justify-content: center; align-items: center; padding: 20px;
+        color: var(--text); transition: 0.4s;
+    }
+    
+    .theme-btn {
+        position: absolute; top: 20px; right: 20px;
+        background: rgba(255,255,255,0.2); border: none; border-radius: 50%;
+        width: 45px; height: 45px; font-size: 20px; cursor: pointer;
+        backdrop-filter: blur(10px); transition: 0.3s; color: white;
+    }
+    .theme-btn:hover { transform: rotate(180deg) scale(1.1); }
+
+    .card {
+        background: var(--card); backdrop-filter: blur(25px);
+        border: 1px solid var(--border); padding: 35px; width: 100%;
+        max-width: 440px; border-radius: 25px; box-shadow: 0 15px 50px rgba(0,0,0,0.4);
+    }
+    
+    .logo { text-align: center; font-size: 28px; font-weight: 700; margin-bottom: 5px; }
+    .logo span { color: #ffd700; }
+    .subtitle { text-align: center; font-size: 13px; opacity: 0.85; margin-bottom: 10px; }
+    .status { text-align: center; font-size: 11px; color: #7bed9f; margin-bottom: 20px; }
+    
+    input {
+        width: 100%; padding: 15px 18px; background: var(--input);
+        border: 1.5px solid var(--border); border-radius: 15px; color: var(--text);
+        font-size: 14px; outline: none; margin-bottom: 18px;
+    }
+    input::placeholder { color: var(--text); opacity: 0.6; }
+    
+    .btn {
+        width: 100%; padding: 15px; background: linear-gradient(90deg, #ff6b6b, #feca57, #48dbfb);
+        background-size: 200% auto; border: none; border-radius: 15px; color: white;
+        font-size: 16px; font-weight: 700; cursor: pointer; transition: 0.4s;
+    }
+    .btn:hover { background-position: right center; transform: translateY(-3px); }
+    
+    .profile {
+        display: flex; align-items: center; gap: 15px; margin: 25px 0; padding: 18px;
+        background: var(--input); border-radius: 15px; border: 1px solid var(--border);
+    }
+    .profile img { 
+        width: 55px; height: 55px; border-radius: 50%; 
+        border: 3px solid #ffd700; object-fit: cover;
+        box-shadow: 0 0 15px rgba(255,215,0,0.5);
+    }
+    .profile b { font-size: 15px; }
+    .profile p { font-size: 12px; opacity: 0.8; }
+    
+    .social { display: flex; gap: 12px; margin-bottom: 18px; }
+    .social a {
+        flex: 1; padding: 12px; text-align: center; border-radius: 12px;
+        background: var(--input); color: var(--text); text-decoration: none;
+        font-size: 14px; font-weight: 600; transition: 0.3s; border: 1px solid var(--border);
+    }
+    .social a:hover { background: rgba(255,255,255,0.2); transform: translateY(-2px); }
+    .footer { text-align: center; font-size: 12px; opacity: 0.7; margin-top: 10px; }
+</style>
 </head>
 <body>
 
-    <h2>সোশ্যাল মিডিয়া ভিডিও ডাউনলোড করুন</h2>
-    <input type="text" id="videoUrl" placeholder="ভিডিওর লিংকটি এখানে দিন">
-    <button onclick="downloadVideo()">ডাউনলোড লিঙ্ক আনুন</button>
+<button class="theme-btn" onclick="toggleTheme()" id="themeBtn">☀️</button>
 
-    <div id="result"></div>
+<div class="card">
+    <div class="logo"> <span>PRO</span> DOWNLOADER ⬇️</div>
+    <p class="subtitle">Facebook • Instagram • YouTube • TikTok</p>
+    <p class="status">● System online</p>
+    
+    <input type="text" id="videoUrl" placeholder="Paste Video Link Here...">
+    <button class="btn" onclick="downloadVideo()">🚀 GET VIDEO NOW</button>
+    
+    <div class="profile">
+        <img src="https://i.imgur.com/zWTJetB.jpeg" alt="Sk Habibulla">
+        <div>
+            <p> Developer | </p>
+            <b>Sk Habibulla</b>
+             <p> Contact to owner 𝄞  </p>
+        </div>
+    </div>
+    
+    <div class="social">
+        <a href="https://www.facebook.com/share/1EegedjFZh/" target="_blank">📘 Facebook</a>
+        <a href="https://www.instagram.com/sk_habib_687?igsh=em5yZzF2NnJ4NGo3" target="_blank">📸 Instagram</a>
+    </div>
+    
+    <div class="footer">
+        Made with ❤️ by Sk Habibulla 
+    </div>
+</div>
 
-    <script>
-        async function downloadVideo() {
-            const url = document.getElementById('videoUrl').value;
-            const resultDiv = document.getElementById('result');
-            
-            if (!url) return alert("দয়া করে একটি লিংক দিন!");
+<script>
+const API_URL = "https://raw.githubusercontent.com/mahmudx7/exe/main/baseApiUrl.json";
+let config = {};
 
-            resultDiv.innerHTML = "প্রসেস হচ্ছে... দয়া করে অপেক্ষা করুন।";
+window.onload = () => {
+    fetch(API_URL).then(res => res.json()).then(data => config = data);
+    document.body.classList.add('dark'); // Default Dark
+    document.getElementById('themeBtn').innerText = '☀️';
+}
 
-            try {
-                // নতুন API কনফিগ লিংকটি এখানে আপডেট করা হয়েছে
-                const response = await fetch("https://raw.githubusercontent.com/Mostakim0978/D1PT0/refs/heads/main/baseApiUrl.json");
-                const config = await response.json();
-                
-                // আপনার নতুন JSON ফাইলের কী (key) অনুযায়ী এখানে পরিবর্তন করতে হতে পারে
-                // আমি ধরে নিচ্ছি আপনার নতুন JSON ফাইলেও একই স্ট্রাকচার আছে
-                const base = config.api; 
+function toggleTheme() {
+    document.body.classList.toggle('dark');
+    const btn = document.getElementById('themeBtn');
+    btn.innerText = document.body.classList.contains('dark') ? '☀️' : '🌙';
+}
 
-                // API কল
-                const apiRes = await fetch(`${base}/api/download?url=${encodeURIComponent(url)}`);
-                const data = await apiRes.json();
+function downloadVideo() {
+    const url = document.getElementById('videoUrl').value;
+    if(url === "") return alert("⚠️ আগে Link টা paste করো!");
+    alert("✅ API: " + config.baseApi + "\n📹 Video: " + url);
+}
+</script>
 
-                if (data.result) {
-                    resultDiv.innerHTML = `<p>ভিডিওটি এখান থেকে ডাউনলোড করুন:</p>
-                                          <a href="${data.result}" target="_blank">ডাউনলোড করুন</a>`;
-                } else {
-                    resultDiv.innerHTML = "দুঃখিত, ভিডিওটি পাওয়া যায়নি।";
-                }
-            } catch (err) {
-                resultDiv.innerHTML = "সার্ভার এরর, পুনরায় চেষ্টা করুন।";
-            }
-        }
-    </script>
 </body>
 </html>
